@@ -1,0 +1,137 @@
+.pringuin-health-report {
+    padding: 15px;
+    font-size: 13px;
+}
+
+.pringuin-health-empty {
+    padding: 30px;
+    text-align: center;
+    color: #666;
+}
+
+.pringuin-health-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    background: #f5f5f5;
+}
+
+.pringuin-health-date {
+    color: #666;
+}
+
+.pringuin-health-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 11px;
+    color: #fff;
+    background: #999;
+}
+
+.pringuin-health-status-ok > .pringuin-health-badge,
+.pringuin-health-status-ok .pringuin-health-check-title .pringuin-health-badge {
+    background: #4caf50;
+}
+
+.pringuin-health-status-warning > .pringuin-health-badge,
+.pringuin-health-status-warning .pringuin-health-check-title .pringuin-health-badge {
+    background: #ff9800;
+}
+
+.pringuin-health-status-critical > .pringuin-health-badge,
+.pringuin-health-status-critical .pringuin-health-check-title .pringuin-health-badge {
+    background: #f44336;
+}
+
+.pringuin-health-status-error > .pringuin-health-badge,
+.pringuin-health-status-error .pringuin-health-check-title .pringuin-health-badge {
+    background: #9c27b0;
+}
+
+.pringuin-health-check {
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-left-width: 4px;
+    border-radius: 4px;
+}
+
+.pringuin-health-check.pringuin-health-status-ok {
+    border-left-color: #4caf50;
+}
+
+.pringuin-health-check.pringuin-health-status-warning {
+    border-left-color: #ff9800;
+}
+
+.pringuin-health-check.pringuin-health-status-critical {
+    border-left-color: #f44336;
+}
+
+.pringuin-health-check.pringuin-health-status-error {
+    border-left-color: #9c27b0;
+}
+
+.pringuin-health-check-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.pringuin-health-check-summary {
+    margin-bottom: 5px;
+}
+
+.pringuin-health-check-details {
+    margin: 5px 0 0 18px;
+    color: #555;
+}
+
+.pringuin-health-check-details li {
+    margin-bottom: 3px;
+    word-break: break-word;
+}
+
+/* Dashboard portlet (compact) */
+.pringuin-health-portlet {
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+.pringuin-health-portlet .pringuin-health-header {
+    margin-bottom: 8px;
+    padding: 6px 8px;
+}
+
+.pringuin-health-portlet-summary {
+    font-weight: bold;
+}
+
+.pringuin-health-portlet-list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pringuin-health-portlet-list td {
+    padding: 4px 6px;
+    border-top: 1px solid #eee;
+    vertical-align: top;
+}
+
+.pringuin-health-portlet-badge {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.pringuin-health-portlet-label {
+    word-break: break-word;
+}
+
+.pringuin-health-portlet-detail {
+    color: #777;
+    margin-top: 2px;
+}

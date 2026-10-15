@@ -1,0 +1,64 @@
+{
+    "name": "pringuin/opendxp-health-bundle",
+    "description": "Health checks for OpenDXP projects: composer audit, stuck message queue detection and more - with report display in the admin UI and email notifications.",
+    "license": "GPL-3.0-or-later",
+    "type": "opendxp-bundle",
+    "keywords": [
+        "opendxp",
+        "opendxp-bundle",
+        "health-check",
+        "monitoring",
+        "composer-audit",
+        "symfony-bundle"
+    ],
+    "homepage": "https://github.com/pringuin/opendxp-health-bundle",
+    "authors": [
+        {
+            "name": "PRinguin GbR",
+            "email": "kontakt@pringuin.de",
+            "homepage": "https://www.pringuin.de"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/pringuin/opendxp-health-bundle/issues",
+        "source": "https://github.com/pringuin/opendxp-health-bundle",
+        "security": "https://github.com/pringuin/opendxp-health-bundle/security/policy"
+    },
+    "require": {
+        "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+        "open-dxp/opendxp": "^1.3",
+        "symfony/http-client": "^7.4",
+        "symfony/lock": "^7.4",
+        "symfony/process": "^7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5",
+        "symfony/yaml": "^7.4"
+    },
+    "suggest": {
+        "open-dxp/admin-bundle": "Required to display the health report in the OpenDXP admin UI"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pringuin\\OpenDxpHealthBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pringuin\\OpenDxpHealthBundle\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "opendxp": {
+            "bundles": [
+                "Pringuin\\OpenDxpHealthBundle\\PringuinOpenDxpHealthBundle"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

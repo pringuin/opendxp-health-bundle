@@ -1,0 +1,166 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    #
+    # INSTALLER
+    #
+    Pringuin\OpenDxpHealthBundle\Installer:
+        public: true
+        arguments:
+            $bundle: "@=service('kernel').getBundle('PringuinOpenDxpHealthBundle')"
+
+    #
+    # CONTROLLERS
+    #
+    Pringuin\OpenDxpHealthBundle\Controller\:
+        resource: '../src/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+    Pringuin\OpenDxpHealthBundle\Controller\StatusController:
+        public: true
+        tags: ['controller.service_arguments']
+        arguments:
+            $enabled: '%pringuin_opendxp_health.status_endpoint.enabled%'
+            $token: '%pringuin_opendxp_health.status_endpoint.token%'
+            $exposeDetails: '%pringuin_opendxp_health.status_endpoint.expose_details%'
+
+    #
+    # SHARED UTILITIES
+    #
+    Pringuin\OpenDxpHealthBundle\Util\ComposerRunner:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
+    Pringuin\OpenDxpHealthBundle\Util\ComposerRunnerInterface:
+        alias: Pringuin\OpenDxpHealthBundle\Util\ComposerRunner
+
+    Pringuin\OpenDxpHealthBundle\Util\ComposerJsonRunner: ~
+
+    Pringuin\OpenDxpHealthBundle\Storage\OpenDxpSettingsStorage: ~
+
+    Pringuin\OpenDxpHealthBundle\Storage\SettingsStorageInterface:
+        alias: Pringuin\OpenDxpHealthBundle\Storage\OpenDxpSettingsStorage
+
+    #
+    # HEALTH CHECKS
+    #
+    Pringuin\OpenDxpHealthBundle\Check\ComposerAuditCheck:
+        arguments:
+            $processTimeout: '%pringuin_opendxp_health.check.composer_audit.process_timeout%'
+
+    Pringuin\OpenDxpHealthBundle\Check\MessageQueueCheck:
+        arguments:
+            $maxAgeHours: '%pringuin_opendxp_health.check.message_queue.max_age_hours%'
+            $queueNames: '%pringuin_opendxp_health.check.message_queue.queue_names%'
+            $excludedQueueNames: '%pringuin_opendxp_health.check.message_queue.excluded_queue_names%'
+            $tableName: '%pringuin_opendxp_health.check.message_queue.table_name%'
+
+    Pringuin\OpenDxpHealthBundle\Check\FailedMessagesCheck:
+        arguments:
+            $receiverLocator: '@messenger.receiver_locator'
+            $transportName: '%pringuin_opendxp_health.check.failed_messages.transport_name%'
+            $listLimit: '%pringuin_opendxp_health.check.failed_messages.list_limit%'
+
+    Pringuin\OpenDxpHealthBundle\Check\MaintenanceCheck:
+        arguments:
+            $maintenanceExecutor: '@OpenDxp\Maintenance\Executor'
+            $maxAgeMinutes: '%pringuin_opendxp_health.check.maintenance.max_age_minutes%'
+
+    Pringuin\OpenDxpHealthBundle\Check\ApplicationLogCheck:
+        arguments:
+            $maxAgeHours: '%pringuin_opendxp_health.check.application_log.max_age_hours%'
+            $priorities: '%pringuin_opendxp_health.check.application_log.priorities%'
+
+    Pringuin\OpenDxpHealthBundle\Check\EmailLogCheck:
+        arguments:
+            $maxAgeHours: '%pringuin_opendxp_health.check.email_log.max_age_hours%'
+            $maxEmailsPerWindow: '%pringuin_opendxp_health.check.email_log.max_emails_per_window%'
+            $windowMinutes: '%pringuin_opendxp_health.check.email_log.window_minutes%'
+
+    Pringuin\OpenDxpHealthBundle\Check\DoctrineMigrationsCheck: ~
+
+    Pringuin\OpenDxpHealthBundle\Check\EnvironmentCheck:
+        arguments:
+            $environment: '%kernel.environment%'
+            $debug: '%kernel.debug%'
+            $expectedEnvironment: '%pringuin_opendxp_health.check.environment.expected_environment%'
+
+    Pringuin\OpenDxpHealthBundle\Check\AdminTwoFactorCheck: ~
+
+    Pringuin\OpenDxpHealthBundle\Check\TableGrowthCheck:
+        arguments:
+            $tables: '%pringuin_opendxp_health.check.table_growth.tables%'
+
+    Pringuin\OpenDxpHealthBundle\Check\SslCertificateCheck:
+        arguments:
+            $domains: '%pringuin_opendxp_health.check.ssl_certificate.domains%'
+            $port: '%pringuin_opendxp_health.check.ssl_certificate.port%'
+            $connectionTimeout: '%pringuin_opendxp_health.check.ssl_certificate.connection_timeout%'
+            $warningDays: '%pringuin_opendxp_health.check.ssl_certificate.warning_days%'
+            $criticalDays: '%pringuin_opendxp_health.check.ssl_certificate.critical_days%'
+
+    Pringuin\OpenDxpHealthBundle\Check\DiskSpaceCheck:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+            $paths: '%pringuin_opendxp_health.check.disk_space.paths%'
+            $warningPercent: '%pringuin_opendxp_health.check.disk_space.warning_percent%'
+            $criticalPercent: '%pringuin_opendxp_health.check.disk_space.critical_percent%'
+
+    Pringuin\OpenDxpHealthBundle\Check\HttpSelfCheck:
+        arguments:
+            $urls: '%pringuin_opendxp_health.check.http_self_check.urls%'
+            $expectedStatusCodes: '%pringuin_opendxp_health.check.http_self_check.expected_status_codes%'
+            $timeout: '%pringuin_opendxp_health.check.http_self_check.timeout%'
+            $warningResponseTimeMs: '%pringuin_opendxp_health.check.http_self_check.warning_response_time_ms%'
+            $criticalResponseTimeMs: '%pringuin_opendxp_health.check.http_self_check.critical_response_time_ms%'
+            $verifyTls: '%pringuin_opendxp_health.check.http_self_check.verify_tls%'
+            $maxRedirects: '%pringuin_opendxp_health.check.http_self_check.max_redirects%'
+
+    Pringuin\OpenDxpHealthBundle\Check\CacheCheck: ~
+
+    Pringuin\OpenDxpHealthBundle\Check\BackupAgeCheck:
+        arguments:
+            $directory: '%pringuin_opendxp_health.check.backup_age.directory%'
+            $filePattern: '%pringuin_opendxp_health.check.backup_age.file_pattern%'
+            $warningHours: '%pringuin_opendxp_health.check.backup_age.warning_hours%'
+            $criticalHours: '%pringuin_opendxp_health.check.backup_age.critical_hours%'
+
+    Pringuin\OpenDxpHealthBundle\Check\ComposerOutdatedCheck:
+        arguments:
+            $watchPackages: '%pringuin_opendxp_health.check.composer_outdated.watch_packages%'
+            $processTimeout: '%pringuin_opendxp_health.check.composer_outdated.process_timeout%'
+
+    Pringuin\OpenDxpHealthBundle\Check\PhpVersionCheck:
+        arguments:
+            $eolDates: '%pringuin_opendxp_health.check.php_version.eol_dates%'
+            $warningDays: '%pringuin_opendxp_health.check.php_version.warning_days%'
+
+    Pringuin\OpenDxpHealthBundle\Check\WritablePathsCheck:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+            $paths: '%pringuin_opendxp_health.check.writable_paths.paths%'
+
+    #
+    # SERVICES
+    #
+    Pringuin\OpenDxpHealthBundle\Service\HealthCheckRunner:
+        arguments:
+            $checks: !tagged_iterator pringuin_opendxp_health.check
+            $checksConfig: '%pringuin_opendxp_health.checks%'
+
+    Pringuin\OpenDxpHealthBundle\Service\HealthReportStorage: ~
+
+    Pringuin\OpenDxpHealthBundle\Service\HealthReportMailer:
+        arguments:
+            $configuredRecipient: '%pringuin_opendxp_health.mail.recipient%'
+
+    #
+    # COMMANDS
+    #
+    Pringuin\OpenDxpHealthBundle\Command\HealthCheckCommand:
+        arguments:
+            $mailEnabled: '%pringuin_opendxp_health.mail.enabled%'
+            $mailMinStatus: '%pringuin_opendxp_health.mail.min_status%'

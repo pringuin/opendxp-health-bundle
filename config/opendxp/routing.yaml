@@ -1,0 +1,15 @@
+# The admin routes must stay below /admin: only there does OpenDXP resolve the admin context, whose
+# CsrfProtectionListener checks the CSRF token of the POST routes (run, send-mail). Moving them
+# elsewhere removes that protection silently - RoutingConfigurationTest guards the prefix.
+_pringuin_opendxp_health_admin:
+    resource: "../../src/Controller/HealthController.php"
+    type: attribute
+    prefix: /admin/pringuin/health
+    options:
+        expose: true
+
+# Public on purpose (external monitoring); authenticated by the token in StatusController.
+_pringuin_opendxp_health_status:
+    resource: "../../src/Controller/StatusController.php"
+    type: attribute
+    prefix: /pringuin/health
