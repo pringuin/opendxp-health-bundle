@@ -7,12 +7,15 @@ use OpenDxp\Config;
 use OpenDxp\Mail;
 use Pringuin\OpenDxpHealthBundle\Report\CheckResult;
 use Pringuin\OpenDxpHealthBundle\Report\HealthReport;
+use Pringuin\OpenDxpHealthBundle\Util\InstanceIdentity;
+use Pringuin\OpenDxpHealthBundle\Util\InstanceIdentityInterface;
 use RuntimeException;
 
 final class HealthReportMailer
 {
     public function __construct(
         private readonly ?string $configuredRecipient,
+        private readonly InstanceIdentityInterface $instanceIdentity = new InstanceIdentity(),
     ) {
     }
 
@@ -50,17 +53,17 @@ final class HealthReportMailer
 
     private function buildSubject(HealthReport $report): string
     {
-        $host = gethostname() ?: 'unknown-host';
+        $instanceName = $this->instanceIdentity->getDisplayName();
 
         if (!$report->hasIssues()) {
-            return sprintf('[OpenDXP Health] OK on %s', $host);
+            return sprintf('[OpenDXP Health] OK on %s', $instanceName);
         }
 
         return sprintf(
             '[OpenDXP Health] %s - %d issue(s) on %s',
             strtoupper($report->getOverallStatus()->value),
             $report->countIssues(),
-            $host
+            $instanceName
         );
     }
 
@@ -69,7 +72,11 @@ final class HealthReportMailer
         $lines = [];
         $lines[] = 'OpenDXP Health Report';
         $lines[] = str_repeat('=', 60);
-        $lines[] = 'Host:    ' . (gethostname() ?: 'unknown-host');
+        $mainDomain = $this->instanceIdentity->getMainDomain();
+        if ($mainDomain !== null) {
+            $lines[] = 'Domain:  ' . $mainDomain;
+        }
+        $lines[] = 'Host:    ' . $this->instanceIdentity->getHostname();
         $lines[] = 'Date:    ' . $report->createdAt->format('Y-m-d H:i:s T');
         $lines[] = 'Status:  ' . strtoupper($report->getOverallStatus()->value);
         $lines[] = '';

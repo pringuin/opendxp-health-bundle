@@ -154,7 +154,7 @@ pringuin_opendxp_health:
     status_endpoint:
         enabled: false                      # public token-protected status endpoint, off by default
         token: ~                            # required shared secret (>= 32 chars); without it the endpoint stays hidden (404)
-        expose_details: false               # include the full report (details, host name) in the response
+        expose_details: false               # include the full report (details, domain, host name) in the response
 ```
 
 The `email_log` send volume check is off by default because the normal volume differs per

@@ -9,6 +9,7 @@ use Pringuin\OpenDxpHealthBundle\Report\CheckResult;
 use Pringuin\OpenDxpHealthBundle\Report\HealthReport;
 use Pringuin\OpenDxpHealthBundle\Report\HealthStatus;
 use Pringuin\OpenDxpHealthBundle\Service\HealthReportStorage;
+use Pringuin\OpenDxpHealthBundle\Tests\Double\FixedInstanceIdentity;
 use Pringuin\OpenDxpHealthBundle\Tests\Double\InMemorySettingsStorage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -119,6 +120,7 @@ final class StatusControllerTest extends TestCase
         self::assertSame([['name' => 'admin_two_factor', 'status' => 'warning']], $data['checks']);
         self::assertArrayNotHasKey('report', $data);
         self::assertArrayNotHasKey('host', $data);
+        self::assertArrayNotHasKey('domain', $data);
         self::assertStringNotContainsString('Admin without 2FA', (string) $response->getContent());
     }
 
@@ -129,7 +131,8 @@ final class StatusControllerTest extends TestCase
 
         $data = $this->decode($response);
         self::assertSame(['Admin without 2FA: jane'], $data['report']['results'][0]['details']);
-        self::assertArrayHasKey('host', $data);
+        self::assertSame('www.example.com', $data['domain']);
+        self::assertSame('test-host', $data['host']);
     }
 
     public function testForbidsCachingOfEveryResponse(): void
@@ -158,7 +161,14 @@ final class StatusControllerTest extends TestCase
             $storage->save($report);
         }
 
-        return new StatusController($storage, $enabled, $token, $exposeDetails, $logger ?? new NullLogger());
+        return new StatusController(
+            $storage,
+            $enabled,
+            $token,
+            $exposeDetails,
+            $logger ?? new NullLogger(),
+            new FixedInstanceIdentity('www.example.com', 'test-host'),
+        );
     }
 
     private function createRequest(string $token): Request

@@ -366,7 +366,7 @@ final class Configuration implements ConfigurationInterface
                             ->defaultNull()
                         ->end()
                         ->booleanNode('expose_details')
-                            ->info('Include the full report (check summaries and details, host name) in the response. The details can contain user names, email addresses, log excerpts and vulnerable package versions.')
+                            ->info('Include the full report (check summaries and details, domain, host name) in the response. The details can contain user names, email addresses, log excerpts and vulnerable package versions.')
                             ->defaultFalse()
                         ->end()
                     ->end()

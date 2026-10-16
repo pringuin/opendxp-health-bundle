@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Pringuin\OpenDxpHealthBundle\Check;
 
-use OpenDxp\Config;
 use OpenDxp\Model\Site\Listing as SiteListing;
 use Pringuin\OpenDxpHealthBundle\Report\CheckResult;
 use Pringuin\OpenDxpHealthBundle\Report\HealthStatus;
 use Pringuin\OpenDxpHealthBundle\Util\CertificateEvaluator;
+use Pringuin\OpenDxpHealthBundle\Util\InstanceIdentity;
+use Pringuin\OpenDxpHealthBundle\Util\InstanceIdentityInterface;
 use Throwable;
 
 /**
@@ -38,6 +39,7 @@ final class SslCertificateCheck implements HealthCheckInterface
         private readonly int $connectionTimeout = 10,
         int $warningDays = 21,
         int $criticalDays = 7,
+        private readonly InstanceIdentityInterface $instanceIdentity = new InstanceIdentity(),
     ) {
         $this->certificateEvaluator = new CertificateEvaluator($warningDays, $criticalDays);
     }
@@ -103,8 +105,8 @@ final class SslCertificateCheck implements HealthCheckInterface
     {
         $domains = [];
 
-        $mainDomain = Config::getSystemConfiguration('general')['domain'] ?? '';
-        if (is_string($mainDomain) && $mainDomain !== '') {
+        $mainDomain = $this->instanceIdentity->getMainDomain();
+        if ($mainDomain !== null) {
             $domains[] = $mainDomain;
         }
 

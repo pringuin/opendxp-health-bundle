@@ -39,6 +39,11 @@ services:
 
     Pringuin\OpenDxpHealthBundle\Util\ComposerJsonRunner: ~
 
+    Pringuin\OpenDxpHealthBundle\Util\InstanceIdentity: ~
+
+    Pringuin\OpenDxpHealthBundle\Util\InstanceIdentityInterface:
+        alias: Pringuin\OpenDxpHealthBundle\Util\InstanceIdentity
+
     Pringuin\OpenDxpHealthBundle\Storage\OpenDxpSettingsStorage: ~
 
     Pringuin\OpenDxpHealthBundle\Storage\SettingsStorageInterface:

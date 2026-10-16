@@ -6,6 +6,8 @@ namespace Pringuin\OpenDxpHealthBundle\Controller;
 use Pringuin\OpenDxpHealthBundle\Report\CheckResult;
 use Pringuin\OpenDxpHealthBundle\Report\HealthReport;
 use Pringuin\OpenDxpHealthBundle\Service\HealthReportStorage;
+use Pringuin\OpenDxpHealthBundle\Util\InstanceIdentity;
+use Pringuin\OpenDxpHealthBundle\Util\InstanceIdentityInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,6 +44,7 @@ final class StatusController
         private readonly ?string $token,
         private readonly bool $exposeDetails = false,
         private readonly LoggerInterface $logger = new NullLogger(),
+        private readonly InstanceIdentityInterface $instanceIdentity = new InstanceIdentity(),
     ) {
     }
 
@@ -125,7 +128,8 @@ final class StatusController
         ];
 
         if ($this->exposeDetails) {
-            $payload['host'] = gethostname() ?: null;
+            $payload['domain'] = $this->instanceIdentity->getMainDomain();
+            $payload['host'] = $this->instanceIdentity->getHostname();
             $payload['report'] = $report->toArray();
         }
 
